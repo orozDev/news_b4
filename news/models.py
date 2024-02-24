@@ -5,7 +5,7 @@ class News(models.Model):
 
     class Meta:
         verbose_name = 'новость'
-        verbose_name_plural = 'новости'
+        verbose_name_plural = 'новости '
 
     name = models.CharField(max_length=100, verbose_name='заголовок')
     image = models.ImageField(verbose_name='изображение', upload_to='news_images/', null=True)
