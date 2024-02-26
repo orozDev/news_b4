@@ -1,0 +1,11 @@
+/media
+/db.sqlite3
+/venv
+
+migrations
+__pycache__
+
+.DS_Store
+
+.idea
+.vs_code
