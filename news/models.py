@@ -13,6 +13,7 @@ class News(models.Model):
     content = models.TextField(verbose_name='контент')
     date = models.DateTimeField(verbose_name='дата добавление')
     is_published = models.BooleanField(default=True, verbose_name='публичность')
+    category = models.ForeignKey('news.Category', on_delete=models.PROTECT, related_name='news', verbose_name='категория')
 
     def __str__(self):
         return f'{self.name} - {self.date}'
@@ -24,9 +25,11 @@ class Category(models.Model):
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
 
-    name = models.CharField(verbose_name='название', max_length=50)
+    name = models.CharField(verbose_name='название', max_length=50, unique=True)
 
     def __str__(self):
         return f'{self.name}'
+
+
 
 # Create your models here.
