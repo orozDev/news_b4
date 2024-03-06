@@ -7,6 +7,11 @@
     <div class="mb-3 text-center">
         <img src="{{ news.image.url }}" class="w-75" alt="{{ news.name }}">
     </div>
+    <p>
+        {% for tag in news.tags.all %}
+            <span>{{ tag.name }}</span> /
+        {% endfor %}
+    </p>
     <p>{{ news.description }}</p>
     <p>{{ news.content }}</p>
     <p class="text-end">{{ news.category.name }} | {{ news.date }}</p>

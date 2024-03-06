@@ -13,6 +13,11 @@
                         <h5 class="card-title">{{ item.name }}</h5>
                         <h6>{{ item.category.name }}</h6>
                         <p class="card-text">{{ item.description }}</p>
+                        <p>
+                            {% for tag in item.tags.all %}
+                                <span>{{ tag.name }}</span> /
+                            {% endfor %}
+                        </p>
                         <a href="{% url 'detail_news' id=item.id %}" class="btn btn-primary">View</a>
                     </div>
                 </div>

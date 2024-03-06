@@ -14,6 +14,7 @@ class News(models.Model):
     date = models.DateTimeField(verbose_name='дата добавление')
     is_published = models.BooleanField(default=True, verbose_name='публичность')
     category = models.ForeignKey('news.Category', on_delete=models.PROTECT, related_name='news', verbose_name='категория')
+    tags = models.ManyToManyField('news.Tag', related_name='news', verbose_name='теги', blank=True)
 
     def __str__(self):
         return f'{self.name} - {self.date}'
@@ -31,5 +32,15 @@ class Category(models.Model):
         return f'{self.name}'
 
 
+class Tag(models.Model):
+
+    class Meta:
+        verbose_name = 'тег'
+        verbose_name_plural = 'теги'
+
+    name = models.CharField(verbose_name='название', max_length=50, unique=True)
+
+    def __str__(self):
+        return f'{self.name}'
 
 # Create your models here.
