@@ -15,4 +15,10 @@
     <p>{{ news.description }}</p>
     <p>{{ news.content }}</p>
     <p class="text-end">{{ news.category.name }} | {{ news.date }}</p>
+    {% if news.info %}
+        <p class="text-end">
+            <a target="_blank" href="{{ news.info.link }}">Link</a> |
+            <span>{{ news.info.email }}</span> : <span>{{ news.info.rating }}</span>
+        </p>
+    {% endif %}
 {% endblock content %}
