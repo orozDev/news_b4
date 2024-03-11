@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator, MinValueValidator, MaxValueVa
 class News(models.Model):
 
     class Meta:
-        verbose_name = 'новость '
+        verbose_name = 'новость'
         verbose_name_plural = 'новости'
 
     name = models.CharField(max_length=100, verbose_name='заголовок')
@@ -19,6 +19,21 @@ class News(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.date}'
+
+
+class NewsAttribute(models.Model):
+
+    class Meta:
+        verbose_name = 'атрибут новостя'
+        verbose_name_plural = 'атрибуты новостей'
+
+    key = models.CharField(verbose_name='название', max_length=100)
+    value = models.CharField(verbose_name='значение', max_length=100)
+    link = models.URLField(verbose_name='ссылка', null=True, blank=True)
+    news = models.ForeignKey('news.News', on_delete=models.CASCADE, related_name='attributes', verbose_name='новость')
+
+    def __str__(self):
+        return f'{self.news}: {self.key} - {self.value}'
 
 
 class Category(models.Model):

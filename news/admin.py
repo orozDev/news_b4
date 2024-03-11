@@ -1,6 +1,15 @@
 from django.contrib import admin
-from .models import News, Category, Tag, AdditionalNewsInfo
+from .models import News, Category, Tag, AdditionalNewsInfo, NewsAttribute
 from django.utils.safestring import mark_safe
+
+
+class NewsAttributeStackedInline(admin.StackedInline):
+    model = NewsAttribute
+    extra = 1
+
+
+class AdditionalNewsInfoTabularInline(admin.TabularInline):
+    model = AdditionalNewsInfo
 
 
 @admin.register(News)
@@ -13,6 +22,7 @@ class NewsAdmin(admin.ModelAdmin):
     # filter_vertical = ('tags',)
     filter_horizontal = ('tags',)
     # raw_id_fields = ('category',)
+    inlines = (NewsAttributeStackedInline, AdditionalNewsInfoTabularInline)
 
     @admin.display(description='Изображение')
     def get_image(self, news: News):
@@ -36,17 +46,5 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name')
     search_fields = ('name',)
 
-
-@admin.register(AdditionalNewsInfo)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'news_name', 'email', 'rating')
-    list_display_links = ('id', 'news_name')
-    search_fields = ('news__name', 'news__description', 'news__content')
-    list_filter = ('news', 'news__category', 'news__date', 'news__tags')
-    readonly_fields = ('news_name',)
-
-    @admin.display(description='Название')
-    def news_name(self, info: AdditionalNewsInfo):
-        return f'{info.news.name}'
 
 # Register your models here.

@@ -14,6 +14,28 @@
     </p>
     <p>{{ news.description }}</p>
     <p>{{ news.content }}</p>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Название</td>
+                <td>Значение</td>
+            </tr>
+            </thead>
+            {% for attribute in news.attributes.all %}
+                <tr>
+                    <td>{{ attribute.key }}</td>
+                    <td>
+                        {% if attribute.link is not None %}
+                            <a href="{{ attribute.link }}">{{ attribute.value }}</a>
+                        {% else %}
+                            {{ attribute.value }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
     <p class="text-end">{{ news.category.name }} | {{ news.date }}</p>
     {% if news.info %}
         <p class="text-end">
