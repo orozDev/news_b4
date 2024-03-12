@@ -6,6 +6,11 @@ from news.models import News
 
 def main(request):
     news = News.objects.all()
+
+    search = request.GET.get('search')
+    if search:
+        news = news.filter(name__icontains=search)
+
     return render(request, 'index.html', {'news': news})
 
 
