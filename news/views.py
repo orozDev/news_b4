@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
+from django.core.paginator import Paginator
 
 from news.models import News
 
@@ -10,6 +11,10 @@ def main(request):
     search = request.GET.get('search')
     if search:
         news = news.filter(name__icontains=search)
+
+    paginator = Paginator(news, 8)
+    page = int(request.GET.get('page', 1))
+    news = paginator.get_page(page)
 
     return render(request, 'index.html', {'news': news})
 
