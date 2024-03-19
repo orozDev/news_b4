@@ -14,7 +14,8 @@ class News(models.Model):
     content = models.TextField(verbose_name='контент')
     date = models.DateTimeField(verbose_name='дата добавление', auto_now_add=True)
     is_published = models.BooleanField(default=True, verbose_name='публичность')
-    category = models.ForeignKey('news.Category', on_delete=models.PROTECT, related_name='news', verbose_name='категория')
+    category = models.ForeignKey('news.Category', on_delete=models.PROTECT, 
+                                 related_name='news', verbose_name='категория')
     tags = models.ManyToManyField('news.Tag', related_name='news', verbose_name='теги', blank=True)
 
     def __str__(self):

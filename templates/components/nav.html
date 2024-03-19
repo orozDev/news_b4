@@ -10,6 +10,7 @@
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="{% url 'list_news' %}">Home</a>
                 </li>
+                {% include "components/categories.html" %}
             </ul>
             <form class="d-flex" method="get" action="{% url  'list_news' %}">
                 <input class="form-control me-2" name="search" type="search" value="{{ request.GET.search }}" placeholder="Search" aria-label="Search">

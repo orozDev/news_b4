@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 from django.core.paginator import Paginator
 
-from news.models import News
+from news.models import News, Category
 
 
 def main(request):
@@ -12,11 +12,12 @@ def main(request):
     if search:
         news = news.filter(name__icontains=search)
 
-    paginator = Paginator(news, 8)
+    paginator = Paginator(news, 2)
     page = int(request.GET.get('page', 1))
     news = paginator.get_page(page)
+    categories = Category.objects.all()
 
-    return render(request, 'index.html', {'news': news})
+    return render(request, 'index.html', {'news': news,})
 
 
 def detail_news(request, id):
@@ -26,6 +27,9 @@ def detail_news(request, id):
     #     raise Http404()
 
     news = get_object_or_404(News, id=id)
-    return render(request, 'detail_news.html', {'news': news})
+    return render(request, 'detail_news.html', {'news': news,})
 
-# Cxreate your views here.
+
+def news_by_category(request, id):
+    news_list = News.objects.filter(category__id=id)
+    return render(request, 'index.html', {'news': news_list,})
