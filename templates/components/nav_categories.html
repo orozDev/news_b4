@@ -1,0 +1,10 @@
+{% load news_tags %}
+
+{% get_categories as categories %}
+
+{% for category in categories %}
+    <li class="nav-item">
+        <a class="nav-link" aria-current="page"
+           href="{% url 'news_by_category' id=category.id %}">{{ category.name }}</a>
+    </li>
+{% endfor %}

@@ -3,7 +3,7 @@
 {% block title %}| Main{% endblock title %}
 
 {% block content %}
-    <h1>Welocome to News.kg</h1>
+    <h1 class="mb-5">Welocome to News.kg {% if category %}| News by {{ category.name }}{% endif %}</h1>
     <div class="row">
         {% for item in news %}
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
@@ -22,6 +22,8 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <h4>No news...</h4>
         {% endfor %}
     </div>
     {% if news.has_previous or news.has_next %}
