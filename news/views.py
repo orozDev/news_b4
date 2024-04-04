@@ -5,7 +5,7 @@ from news.models import News, Category
 
 
 def main(request):
-    news = News.objects.all()
+    news = News.objects.all().order_by('-date', 'name')
 
     search = request.GET.get('search')
     if search:
@@ -33,7 +33,7 @@ def detail_news(request, id):
 
 def news_by_category(request, id):
     category = get_object_or_404(Category, id=id)
-    news = News.objects.filter(category=category)
+    news = News.objects.filter(category=category).order_by('-date', 'name')
 
     paginator = Paginator(news, 8)
     page = int(request.GET.get('page', 1))

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load custom_filters %}
+
 {% block title %}| {{ news.name }}{% endblock title %}
 
 {% block content %}
@@ -13,7 +15,7 @@
         {% endfor %}
     </p>
     <p>{{ news.description }}</p>
-    <p>{{ news.content }}</p>
+    <p>{{ news.content|safe }}</p>
     <div>
         <table class="table">
             <thead>
