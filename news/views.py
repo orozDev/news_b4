@@ -15,8 +15,6 @@ def main(request):
     page = int(request.GET.get('page', 1))
     news = paginator.get_page(page)
 
-    categories = Category.objects.all()
-
     return render(request, 'index.html', {'news': news})
 
 

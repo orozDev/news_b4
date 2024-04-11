@@ -3,7 +3,7 @@
 {% block title %}| Main{% endblock title %}
 
 {% block content %}
-    <h1 class="mb-5">Welocome to News.kg {% if category %}| News by {{ category.name }}{% endif %}</h1>
+    <h1 class="mb-5">Welcome to News.kg {% if category %}| News by {{ category.name }}{% endif %}</h1>
     <div class="row">
         {% for item in news %}
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
@@ -26,37 +26,5 @@
             <h4>No news...</h4>
         {% endfor %}
     </div>
-    {% if news.has_previous or news.has_next %}
-        <nav>
-            <ul class="pagination">
-                {% if news.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ news.previous_page_number }}">
-                            <i class="fa-solid fa-angle-left"></i>
-                        </a>
-                    </li>
-                {% endif %}
-
-                {% for i in news.paginator.page_range %}
-                    {% if news.number == i %}
-                        <li class="page-item active">
-                            <span class="page-link">{{ i }}</span>
-                        </li>
-                    {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-
-                {% if news.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ news.next_page_number }}">
-                            <i class="fa-solid fa-angle-right"></i>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-    {% endif %}
+    {% include 'components/news_pagiantion.html' %}
 {% endblock content %}

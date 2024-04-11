@@ -1,0 +1,52 @@
+{% extends 'workspace/base.html' %}
+
+{% block title %}| Workspace{% endblock title %}
+
+{% block content %}
+
+    <h2 class="mb-5">Create news</h2>
+
+    <div>
+        <form action="{% url 'create_news' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-4">
+                <input name="name" placeholder="Заголовок" type="text" class="form-control" required>
+            </div>
+            <div class="mb-4">
+                <input name="image" placeholder="Изображение" type="file" class="form-control" required>
+            </div>
+            <div class="mb-4">
+                <textarea name="description" placeholder="Краткое описание" class="form-control" required></textarea>
+            </div>
+            <div class="mb-4">
+                <textarea name="content" placeholder="Контент" rows="15" class="form-control" required></textarea>
+            </div>
+            <div class="mb-4">
+                <input type="checkbox" id="checkbox_is_published" name="is_published">
+                <label for="checkbox_is_published">Is Published</label>
+            </div>
+            <div class="mb-4">
+                <select name="category" class="form-select" required>
+                    <option selected disabled>Select category</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <select name="tags" multiple class="form-select" required>
+                    <option selected disabled>Select tags</option>
+                    {% for tag in tags %}
+                        <option value="{{ tag.id }}">{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-success w-100 d-block">Create</button>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock content %}
