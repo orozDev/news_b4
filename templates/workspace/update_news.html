@@ -1,0 +1,55 @@
+{% extends 'workspace/base.html' %}
+
+{% block title %}| Update the news "{{ news.name }}"{% endblock title %}
+
+{% block content %}
+
+    <h2 class="mb-5">Update the news "{{ news.name }}"</h2>
+
+    <div>
+        <form action="{% url 'update_news' id=news.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-4">
+                <input name="name" placeholder="Заголовок" value="{{ news.name }}" type="text" class="form-control" required>
+            </div>
+            <div class="mb-4">
+                {% if news.image %}
+                    <div class="mb-3">Current url image: <a target="_blank" href="{{ news.image.url }}">{{ news.image.url }}</a></div>
+                {% endif %}
+                <input name="image" placeholder="Изображение" type="file" class="form-control">
+            </div>
+            <div class="mb-4">
+                <textarea name="description" placeholder="Краткое описание" class="form-control" required>{{ news.description }}</textarea>
+            </div>
+            <div class="mb-4">
+                <textarea name="content" placeholder="Контент" rows="15" class="form-control" required>{{ news.content }}</textarea>
+            </div>
+            <div class="mb-4">
+                <input type="checkbox" id="checkbox_is_published" {% if news.is_published %}checked{% endif %} name="is_published">
+                <label for="checkbox_is_published">Is Published</label>
+            </div>
+            <div class="mb-4">
+                <select name="category" class="form-select" required>
+                    <option disabled>Select category</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category == news.category %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <select name="tags" multiple class="form-select" required>
+                    <option disabled>Select tags</option>
+                    {% for tag in tags %}
+                        <option  {% if tag in news.tags.all %}selected{% endif %} value="{{ tag.id }}">{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-success w-100 d-block">Save</button>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock content %}
