@@ -2,6 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 
 from news.models import News, Category, Tag
+from workspace.forms import NewsForm
 
 
 def workspace(request):
@@ -18,32 +19,57 @@ def workspace(request):
     return render(request, 'workspace/index.html', {'news': news})
 
 
+# def create_news(request):
+#     if request.method == 'POST':
+#         category_id = int(request.POST.get('category'))
+#         tag_ids = list(map(int, request.POST.getlist('tags')))
+#         tags = Tag.objects.filter(id__in=tag_ids)
+#         image = request.FILES.get('image')
+#         data = {
+#             'name': request.POST.get('name'),
+#             'description': request.POST.get('description'),
+#             'content': request.POST.get('content'),
+#             'is_published': request.POST.get('is_published', False) == 'on',
+#             'category': Category.objects.get(id=category_id)
+#         }
+#
+#         news = News.objects.create(**data)
+#         news.tags.add(*tags)
+#         news.image.save(image.name, image)
+#
+#         return redirect('/workspace/')
+#
+#     categories = Category.objects.all()
+#     tags = Tag.objects.all()
+#     return render(request, 'workspace/create_news.html', {
+#         'categories': categories,
+#         'tags': tags,
+#     })
+
+
 def create_news(request):
+    form = NewsForm()
+
     if request.method == 'POST':
-        category_id = int(request.POST.get('category'))
-        tag_ids = list(map(int, request.POST.getlist('tags')))
-        tags = Tag.objects.filter(id__in=tag_ids)
-        image = request.FILES.get('image')
-        data = {
-            'name': request.POST.get('name'),
-            'description': request.POST.get('description'),
-            'content': request.POST.get('content'),
-            'is_published': request.POST.get('is_published', False) == 'on',
-            'category': Category.objects.get(id=category_id)
-        }
+        form = NewsForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            tags = form.cleaned_data['tags']
+            image = form.cleaned_data['image']
+            data = {
+                'name': form.cleaned_data.get('name'),
+                'description': form.cleaned_data.get('description'),
+                'content': form.cleaned_data.get('content'),
+                'is_published': form.cleaned_data.get('is_published'),
+                'category': form.cleaned_data.get('category')
+            }
 
-        news = News.objects.create(**data)
-        news.tags.add(*tags)
-        news.image.save(image.name, image)
+            news = News.objects.create(**data)
+            news.tags.add(*tags)
+            news.image.save(image.name, image)
 
-        return redirect('/workspace/')
+            return redirect('/workspace/')
 
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
-    return render(request, 'workspace/create_news.html', {
-        'categories': categories,
-        'tags': tags,
-    })
+    return render(request, 'workspace/create_news.html', {'form': form})
 
 
 def update_news(request, id):
