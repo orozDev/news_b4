@@ -53,19 +53,7 @@ def create_news(request):
     if request.method == 'POST':
         form = NewsForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            tags = form.cleaned_data['tags']
-            image = form.cleaned_data['image']
-            data = {
-                'name': form.cleaned_data.get('name'),
-                'description': form.cleaned_data.get('description'),
-                'content': form.cleaned_data.get('content'),
-                'is_published': form.cleaned_data.get('is_published'),
-                'category': form.cleaned_data.get('category')
-            }
-
-            news = News.objects.create(**data)
-            news.tags.add(*tags)
-            news.image.save(image.name, image)
+            news = form.save()
 
             return redirect('/workspace/')
 

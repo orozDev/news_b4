@@ -6,7 +6,7 @@
 
     <h2 class="mb-5">Create news</h2>
 
-    <div>
+{#    <div>#}
         {#        <form action="{% url 'create_news' %}" method="post" enctype="multipart/form-data">#}
         {#            {% csrf_token %}#}
         {#            <div class="mb-4">#}
@@ -47,7 +47,7 @@
         {#            </div>#}
         {##}
         {#        </form>#}
-    </div>
+{#    </div>#}
 
     <div>
         <form action="{% url 'create_news' %}" method="post" novalidate enctype="multipart/form-data">
@@ -108,5 +108,16 @@
 
         </form>
     </div>
+
+{#    <div>#}
+{#        <form action="{% url 'create_news' %}" method="post" novalidate enctype="multipart/form-data">#}
+{#            {% csrf_token %}#}
+{#            {{ form.as_p }}#}
+{#            <div>#}
+{#                <button type="submit" class="btn btn-success w-100 d-block">Create</button>#}
+{#            </div>#}
+{##}
+{#        </form>#}
+{#    </div>#}
 
 {% endblock content %}
