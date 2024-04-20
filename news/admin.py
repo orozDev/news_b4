@@ -14,10 +14,10 @@ class AdditionalNewsInfoTabularInline(admin.TabularInline):
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'category', 'date', 'is_published', 'get_image')
+    list_display = ('id', 'name', 'category', 'date', 'is_published', 'author', 'get_image')
     list_display_links = ('id', 'name')
     search_fields = ('name', 'description', 'content')
-    list_filter = ('category', 'date', 'is_published', 'tags')
+    list_filter = ('category', 'date', 'is_published', 'tags', 'author')
     readonly_fields = ('date', 'get_full_image')
     # filter_vertical = ('tags',)
     filter_horizontal = ('tags',)

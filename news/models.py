@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import User
 
 
 class News(models.Model):
@@ -17,6 +18,7 @@ class News(models.Model):
     category = models.ForeignKey('news.Category', on_delete=models.PROTECT, 
                                  related_name='news', verbose_name='категория')
     tags = models.ManyToManyField('news.Tag', related_name='news', verbose_name='теги', blank=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name='автор')
 
     def __str__(self):
         return f'{self.name} - {self.date}'
