@@ -15,8 +15,8 @@
 <body>
 
 {% include 'components/workspace/nav.html' %}
-
 <div class="container">
+    {% include 'components/messages.html' %}
     {% block content %}{% endblock content %}
 </div>
 

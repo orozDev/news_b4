@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -17,8 +18,6 @@ def workspace(request):
     paginator = Paginator(news, 8)
     page = int(request.GET.get('page', 1))
     news = paginator.get_page(page)
-
-
 
     return render(request, 'workspace/index.html', {'news': news})
 
@@ -60,8 +59,11 @@ def create_news(request):
             news = form.save(commit=False)
             news.author = request.user
             news.save()
+            messages.success(request, f'The news "{news.name}" has been successfully created!')
 
             return redirect('/workspace/')
+
+        messages.error(request, f'Correct errors below')
 
     return render(request, 'workspace/create_news.html', {'form': form})
 
@@ -107,8 +109,9 @@ def update_news(request, id):
         form = NewsForm(instance=news, files=request.FILES, data=request.POST)
         if form.is_valid():
             news = form.save()
-
-        return redirect('/workspace/')
+            messages.success(request, f'The news "{news.name}" has been successfully updated!')
+            return redirect('/workspace/')
+        messages.error(request, f'Correct errors below')
 
     return render(request, 'workspace/update_news.html', {
         'news': news,
@@ -118,7 +121,9 @@ def update_news(request, id):
 
 def delete_news(request, id):
     news = get_object_or_404(News, id=id)
+    name = news.name
     news.delete()
+    messages.success(request, f'The news "{name}" has been successfully deleted!')
     return redirect('/workspace/')
 
 # Create your views here.
