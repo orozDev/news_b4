@@ -20,10 +20,13 @@ from news.views import main, detail_news
 from django.conf.urls.static import static
 from django.conf import settings
 from django.shortcuts import redirect
+from workspace import views as workspace_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('news/', include('news.urls')),
+    path('auth/login/', workspace_views.login_profile, name='login'),
+    path('auth/logout/', workspace_views.logout_profile, name='logout'),
     path('workspace/', include('workspace.urls')),
     path('', lambda r: redirect('/news/'), name='main')
 

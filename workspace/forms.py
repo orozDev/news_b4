@@ -1,6 +1,7 @@
 from django import forms
+from django.contrib.auth.password_validation import validate_password
 
-from news.models import Category, Tag, News
+from news.models import News
 
 
 #
@@ -50,3 +51,10 @@ class NewsForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-select'}),
             'tags': forms.CheckboxSelectMultiple()
         }
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your username'}))
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': 'Enter password'}))

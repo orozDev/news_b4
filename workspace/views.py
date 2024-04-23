@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
 
 from news.models import News
-from workspace.forms import NewsForm
+from workspace.forms import NewsForm, LoginForm
 
 
 def workspace(request):
@@ -125,5 +126,38 @@ def delete_news(request, id):
     news.delete()
     messages.success(request, f'The news "{name}" has been successfully deleted!')
     return redirect('/workspace/')
+
+
+def login_profile(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+
+    form = LoginForm()
+    message = None
+
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+
+            user = authenticate(username=username, password=password)
+
+            if user:
+                login(request, user)
+                messages.success(request, f'Welcome to workspace "{user.first_name} {user.last_name}"')
+                return redirect('/workspace/')
+
+            message = 'The user does not exist or the password is incorrect.'
+
+    return render(request, 'auth/login.html', {'form': form, 'message': message})
+
+
+def logout_profile(request):
+
+    if request.user.is_authenticated:
+        logout(request)
+
+    return redirect('/')
 
 # Create your views here.
