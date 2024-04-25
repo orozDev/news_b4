@@ -4,14 +4,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 
 from news.models import News
+# from django.contrib.auth.decorators import login_required
+from workspace.decorators import login_required, own_news
 from workspace.forms import NewsForm, LoginForm
 
 
+@login_required(login_url='/auth/login/')
 def workspace(request):
-    news = News.objects.all().order_by('-date', 'name')
-    if request.user.is_authenticated:
-        news = News.objects.filter(author=request.user)
 
+    news = News.objects.filter(author=request.user).order_by('-date', 'name')
     search = request.GET.get('search')
     if search:
         news = news.filter(name__icontains=search)
@@ -51,7 +52,9 @@ def workspace(request):
 #     })
 
 
+@login_required()
 def create_news(request):
+
     form = NewsForm()
 
     if request.method == 'POST':
@@ -102,7 +105,10 @@ def create_news(request):
 #     })
 
 
+@login_required()
+@own_news
 def update_news(request, id):
+
     news = get_object_or_404(News, id=id)
     form = NewsForm(instance=news)
 
@@ -120,7 +126,10 @@ def update_news(request, id):
     })
 
 
+@login_required()
+@own_news
 def delete_news(request, id):
+
     news = get_object_or_404(News, id=id)
     name = news.name
     news.delete()
@@ -129,8 +138,6 @@ def delete_news(request, id):
 
 
 def login_profile(request):
-    if request.user.is_authenticated:
-        return redirect('/')
 
     form = LoginForm()
     message = None
