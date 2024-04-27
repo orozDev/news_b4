@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.forms import BaseUserCreationForm
+from django.contrib.auth.models import User
 
 from news.models import News
 
@@ -58,3 +59,30 @@ class LoginForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your username'}))
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'class': 'form-control', 'placeholder': 'Enter password'}))
+
+
+class RegisterForm(BaseUserCreationForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Придумайте пароль'})
+        self.fields['password2'].widget = forms.PasswordInput(
+            attrs={'class': 'form-control', 'placeholder': 'Подтвердите пароль'})
+
+    class Meta:
+        model = User
+        fields = (
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'password1',
+            'password2'
+        )
+
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите имя'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите фамилию'}),
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Придумайте имя пользователя'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Введите эл. почту'}),
+        }

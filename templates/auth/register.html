@@ -1,0 +1,30 @@
+{% extends 'workspace/base.html' %}
+{% load static %}
+
+{% block title %}| Login{% endblock title %}
+
+{% block content %}
+
+    <style>
+
+        #register_form ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            color: red;
+        }
+
+    </style>
+
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh">
+        <div class="card" style="min-width: 400px">
+            <div class="card-body">
+                <form action="{% url 'register' %}" id="register_form" method="POST" novalidate>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success w-100 d-block">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

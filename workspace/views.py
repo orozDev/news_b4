@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from news.models import News
 # from django.contrib.auth.decorators import login_required
 from workspace.decorators import login_required, own_news
-from workspace.forms import NewsForm, LoginForm
+from workspace.forms import NewsForm, LoginForm, RegisterForm
 
 
 @login_required(login_url='/auth/login/')
@@ -166,5 +166,22 @@ def logout_profile(request):
         logout(request)
 
     return redirect('/')
+
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+
+    form = RegisterForm()
+
+    if request.method == 'POST':
+        form = RegisterForm(data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, f'Welcome to workspace "{user.first_name} {user.last_name}"')
+            return redirect('/workspace/')
+
+    return render(request, 'auth/register.html', {'form': form})
 
 # Create your views here.
