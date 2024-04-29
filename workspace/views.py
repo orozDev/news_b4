@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from news.models import News
 # from django.contrib.auth.decorators import login_required
 from workspace.decorators import login_required, own_news
-from workspace.forms import NewsForm, LoginForm, RegisterForm
+from workspace.forms import NewsForm, LoginForm, RegisterForm, ChangeProfileForm
 
 
 @login_required(login_url='/auth/login/')
@@ -183,5 +183,19 @@ def register(request):
             return redirect('/workspace/')
 
     return render(request, 'auth/register.html', {'form': form})
+
+
+@login_required()
+def change_profile(request):
+    form = ChangeProfileForm(instance=request.user)
+
+    if request.method == 'POST':
+        form = ChangeProfileForm(instance=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Your profile has been changed successfully!')
+            return redirect('/workspace/')
+
+    return render(request, 'auth/change_profile.html', {'form': form})
 
 # Create your views here.

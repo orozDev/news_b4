@@ -29,6 +29,7 @@ urlpatterns = [
     path('auth/login/', workspace_views.login_profile, name='login'),
     path('auth/logout/', workspace_views.logout_profile, name='logout'),
     path('auth/register/', workspace_views.register, name='register'),
+    path('auth/change-profile/', workspace_views.change_profile, name='change_profile'),
     path('workspace/', include('workspace.urls')),
     path('', news_views.main, name='main')
 
