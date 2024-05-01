@@ -2,7 +2,11 @@
     <div class="card-body">
         <h5 class="mb-3">News Filter:</h5>
         <div>
-
+            {{ filter.form.as_div }}
+            <input type="hidden" name="offset" value="{{ request.GET.offset }}">
+            <button class="btn btn-primary" type="submit">
+                Filter
+            </button>
         </div>
     </div>
 </aside>

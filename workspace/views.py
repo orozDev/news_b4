@@ -7,6 +7,7 @@ from news.models import News
 # from django.contrib.auth.decorators import login_required
 from workspace.decorators import login_required, own_news
 from workspace.forms import NewsForm, LoginForm, RegisterForm, ChangeProfileForm
+from workspace.filters import NewsFilter
 
 
 @login_required(login_url='/auth/login/')
@@ -17,11 +18,13 @@ def workspace(request):
     if search:
         news = news.filter(name__icontains=search)
 
-    paginator = Paginator(news, 8)
+    filter_set = NewsFilter(request.GET, queryset=news)
+
+    paginator = Paginator(filter_set.qs, 8)
     page = int(request.GET.get('page', 1))
     news = paginator.get_page(page)
 
-    return render(request, 'workspace/index.html', {'news': news})
+    return render(request, 'workspace/index.html', {'news': news, 'filter': filter_set})
 
 
 # def create_news(request):

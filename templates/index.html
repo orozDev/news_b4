@@ -5,26 +5,34 @@
 {% block content %}
     <h1 class="mb-5">Welcome to News.kg {% if category %}| News by {{ category.name }}{% endif %}</h1>
     <div class="row">
-        {% for item in news %}
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
-                <div class="card h-100">
-                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ item.name }}</h5>
-                        <h6>{{ item.category.name }}</h6>
-                        <p class="card-text">{{ item.description }}</p>
-                        <p>
-                            {% for tag in item.tags.all %}
-                                <span>{{ tag.name }}</span> /
-                            {% endfor %}
-                        </p>
-                        <a href="{% url 'detail_news' id=item.id %}" class="btn btn-primary">View</a>
+        <div class="col-12 col-md-4 col-lg-3">
+            {% include 'components/sidebar.html' %}
+        </div>
+        <div class="col-12 col-md-8 col-lg-9">
+            <div class="row mb-5">
+                {% for item in news %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+                        <div class="card h-100">
+                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.name }}</h5>
+                                <h6>{{ item.category.name }}</h6>
+                                <p class="card-text">{{ item.description }}</p>
+                                <p>
+                                    {% for tag in item.tags.all %}
+                                        <span>{{ tag.name }}</span> /
+                                    {% endfor %}
+                                </p>
+                                <a href="{% url 'detail_news' id=item.id %}" class="btn btn-primary">View</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    {% empty %}
+                    <h4>No news...</h4>
+                {% endfor %}
             </div>
-            {% empty %}
-            <h4>No news...</h4>
-        {% endfor %}
+        </div>
     </div>
     {% include 'components/news_pagiantion.html' %}
+
 {% endblock content %}
