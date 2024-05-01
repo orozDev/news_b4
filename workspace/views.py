@@ -6,8 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from news.models import News
 # from django.contrib.auth.decorators import login_required
 from workspace.decorators import login_required, own_news
-from workspace.forms import NewsForm, LoginForm, RegisterForm, ChangeProfileForm
+from workspace.forms import NewsForm, LoginForm, RegisterForm, ChangeProfileForm, ChangePasswordForm
 from workspace.filters import NewsFilter
+from django.contrib.auth.hashers import make_password
 
 
 @login_required(login_url='/auth/login/')
@@ -200,5 +201,27 @@ def change_profile(request):
             return redirect('/workspace/')
 
     return render(request, 'auth/change_profile.html', {'form': form})
+
+
+@login_required()
+def change_password(request):
+
+    form = ChangePasswordForm()
+
+    if request.method == 'POST':
+        form = ChangePasswordForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            new_password = form.cleaned_data.get('new_password')
+            user = request.user
+            # user.password = make_password(new_password)
+            user.set_password(new_password)
+            user.save()
+
+            login(request, user)
+
+            messages.success(request, f'Your password has been changed!')
+            return redirect('/workspace/')
+
+    return render(request, 'auth/change_password.html', {'form': form})
 
 # Create your views here.

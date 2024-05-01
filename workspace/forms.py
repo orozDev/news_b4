@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import BaseUserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
 
 from news.models import News
 
@@ -65,7 +66,8 @@ class RegisterForm(BaseUserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Придумайте пароль'})
+        self.fields['password1'].widget = forms.PasswordInput(
+            attrs={'class': 'form-control', 'placeholder': 'Придумайте пароль'})
         self.fields['password2'].widget = forms.PasswordInput(
             attrs={'class': 'form-control', 'placeholder': 'Подтвердите пароль'})
 
@@ -114,3 +116,37 @@ class ChangeProfileForm(forms.ModelForm):
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя пользователя'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Введите эл. почту'})
         }
+
+
+class ChangePasswordForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.user: User = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+    password = forms.CharField(label='Текущий пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    new_password = forms.CharField(label='Новый пароль',
+                                   widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                   validators=[validate_password])
+    confirm_password = forms.CharField(label='Подтвердите пароль',
+                                       widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+    def clean(self):
+        data = self.cleaned_data
+
+        password = data.get('password')
+        new_password = data.get('new_password')
+        confirm_password = data.get('confirm_password')
+
+        errors = {}
+
+        if not self.user.check_password(password):
+            errors['password'] = ['The password is incorrect.']
+
+        if new_password != confirm_password:
+            errors['confirm_password'] = ['The passwords do not match.']
+
+        if len(errors) > 0:
+            raise forms.ValidationError(errors)
+
+        return data

@@ -11,7 +11,7 @@
         <div class="col-12 col-md-8 col-lg-9">
             <div class="row mb-5">
                 {% for item in news %}
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+                    <div class="col-lg-4 col-md-6 col-12 mb-4">
                         <div class="card h-100">
                             <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
                             <div class="card-body">
@@ -31,8 +31,8 @@
                     <h4>No news...</h4>
                 {% endfor %}
             </div>
+            {% include 'components/news_pagiantion.html' %}
         </div>
     </div>
-    {% include 'components/news_pagiantion.html' %}
 
 {% endblock content %}
